@@ -15,7 +15,30 @@ namespace ChiFouMi.Test
             var playerMoves = new[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
             var computerMoves = new[] { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
 
-            AssertGamesAreEqual(new string[0], playerMoves, computerMoves);
+            AssertOldAndNewGamesAreEqual(new string[0], playerMoves, computerMoves);
+        }
+
+        [TestMethod]
+        public void GivenAllNonBuggyInputsWhenExecutingCleanAndOldGameSideBySideThenEnsureOutputAreIdentical()
+        {
+            //Buggy inputs : [2,1] and [2,3]
+            var playerMoves = new[] { 1, 1, 1, 2, 3, 3, 3 };
+            var computerMoves = new[] { 1, 2, 3, 2, 1, 2, 3 };
+
+            AssertOldAndCleanGamesAreEqual(new string[0], playerMoves, computerMoves);
+        }
+
+        [TestMethod]
+        public void GivenAllNonBuggyInputsWhenExecutingCleanAndOldGameSideBySideInRoxorModeThenEnsureOutputAreIdentical()
+        {
+            //buggy input : [2,3]
+            var playerMoves =   new[] { 1, 1, 1, 2, 2, 3, 3, 3 };
+            var computerMoves = new[] { 1, 2, 3, 1, 2, 1, 2, 3 };
+
+            for (int i = 0; i < playerMoves.Length; i++)
+            {
+                AssertOldAndCleanGamesAreEqual(new[] { "roxor" }, new[] { playerMoves[i] }, new[] { computerMoves[i] });
+            }
         }
 
         [TestMethod]
@@ -26,7 +49,7 @@ namespace ChiFouMi.Test
             var playerMoves = Enumerable.Range(0, 5000).Select(_ => random.Next(1, 4)).ToArray();
             var computerMoves = Enumerable.Range(0, 5000).Select(_ => random.Next(1, 4)).ToArray();
 
-            AssertGamesAreEqual(new string[0], playerMoves, computerMoves);
+            AssertOldAndNewGamesAreEqual(new string[0], playerMoves, computerMoves);
         }
 
         [TestMethod]
@@ -35,33 +58,41 @@ namespace ChiFouMi.Test
             var playerMoves = new[] { 1, 2, 3 };
             var computerMoves = new[] { 1, 2, 3 };
 
-            AssertGamesAreEqual(new[] { "roxor" }, playerMoves, computerMoves);
+            AssertOldAndNewGamesAreEqual(new[] { "roxor" }, playerMoves, computerMoves);
         }
 
         [TestMethod]
         public void GivenNonStandardInputWhenExecuteNewAndOldGameSideBySideThenResultAreEquals()
         {
-            AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(Enumerable.Range(0, 10).ToArray());
+            AssertOldAndNewGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(Enumerable.Range(0, 10).ToArray());
         }
 
-        private void AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(int[] possibleValues)
+        private void AssertOldAndNewGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(int[] possibleValues)
         {
             foreach (var i in possibleValues)
             {
                 foreach (var j in possibleValues)
                 {
-                    AssertGamesAreEqual(new[] { "roxor" }, new[] { i }, new[] { j });
-                    AssertGamesAreEqual(new string[0], new[] { i }, new[] { j });
+                    AssertOldAndNewGamesAreEqual(new[] { "roxor" }, new[] { i }, new[] { j });
+                    AssertOldAndNewGamesAreEqual(new string[0], new[] { i }, new[] { j });
                 }
             }
         }
 
-        private void AssertGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
+        private void AssertOldAndNewGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
         {
             var oldGameOutput = ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
             var newGameOutput = ExecuteGame(f => new NewGame(f), args, playerMoves, computerMoves);
 
             Assert.AreEqual(oldGameOutput, newGameOutput);
+        }
+
+        private void AssertOldAndCleanGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
+        {
+            var oldGameOutput = ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
+            var cleanGameOutput = ExecuteGame(f => new CleanGame(f), args, playerMoves, computerMoves);
+
+            Assert.AreEqual(oldGameOutput, cleanGameOutput);
         }
 
         private string ExecuteGame(Func<Action<string>, IGame> gameConstructor, string[] args, IList<int> playerMoves, IList<int> computerMoves)

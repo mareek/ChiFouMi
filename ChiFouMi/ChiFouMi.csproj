@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CleanGame.cs" />
+    <Compile Include="Dictionary.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="OldGame.cs" />
     <Compile Include="NewGame.cs" />

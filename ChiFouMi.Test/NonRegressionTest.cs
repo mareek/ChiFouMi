@@ -58,13 +58,13 @@ namespace ChiFouMi.Test
 
         private void AssertGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
         {
-            var oldGameOutput = ExecuteGame(new OldGame(), args, playerMoves, computerMoves);
-            var newGameOutput = ExecuteGame(new NewGame(), args, playerMoves, computerMoves);
+            var oldGameOutput = ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
+            var newGameOutput = ExecuteGame(f => new NewGame(f), args, playerMoves, computerMoves);
 
             Assert.AreEqual(oldGameOutput, newGameOutput);
         }
 
-        private string ExecuteGame(IGame game, string[] args, IList<int> playerMoves, IList<int> computerMoves)
+        private string ExecuteGame(Func<Action<string>, IGame> gameConstructor, string[] args, IList<int> playerMoves, IList<int> computerMoves)
         {
             var outputBuilder = new StringBuilder();
             Action<string> output = val => outputBuilder.AppendLine(val);
@@ -79,7 +79,7 @@ namespace ChiFouMi.Test
             int iComputer = 0;
             Func<int> getComputerInput = () => computerMoves[iComputer++];
 
-            game.LaunchGame(args, output, getPlayerInput, getComputerInput);
+            gameConstructor(output).PlayGame(args, getPlayerInput, getComputerInput);
 
             return outputBuilder.ToString();
         }

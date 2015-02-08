@@ -8,7 +8,6 @@ namespace ChiFouMi
     {
         static void Main(string[] args)
         {
-            Action<string> Output = Console.WriteLine;
             Func<string> InputPlayer = Console.ReadLine;
             Func<int> InputComputer = () =>
             {
@@ -16,7 +15,7 @@ namespace ChiFouMi
                 return rand.Next(1, 4).ToString()[0] - 48;
             };
 
-            new NewGame().LaunchGame(args, Output, InputPlayer, InputComputer);
+            new NewGame(Console.WriteLine).PlayGame(args, InputPlayer, InputComputer);
         }
     }
 }

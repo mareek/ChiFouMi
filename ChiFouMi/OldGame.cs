@@ -15,6 +15,14 @@ namespace ChiFouMi
         private int _cnt = 0;
         private Stack<string> _coupsPossibles = new Stack<string>();
 
+        private readonly Action<string> Output;
+
+        public OldGame(Action<string> outputMethod)
+        {
+            Output = outputMethod;
+        }
+
+
         private bool Initialize(Func<string> Input)
         {
             _coupsPossibles = new Stack<string>();
@@ -25,7 +33,7 @@ namespace ChiFouMi
             return Input().StartsWith(Exit);
         }
 
-        public void LaunchGame(string[] args, Action<string> Output, Func<string> InputPlayer, Func<int> InputComputer)
+        public void PlayGame(string[] args, Func<string> InputPlayer, Func<int> InputComputer)
         {
 
             bool roxorMoMode = false;

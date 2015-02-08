@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChiFouMi
 {
-    public class OldGame : IGame
+    public class NewGame : IGame
     {
         private const bool Rmdi = false;
         private const string Exit = "exit";

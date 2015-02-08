@@ -8,129 +8,104 @@ namespace ChiFouMi
 {
     public class NewGame : IGame
     {
-        private const bool Rmdi = false;
-        private const string Exit = "exit";
-
-        private int _intUv;
-        private int _cnt = 0;
-        private Stack<string> _coupsPossibles = new Stack<string>();
-
-        private bool Initialize(Func<string> Input)
-        {
-            _coupsPossibles = new Stack<string>();
-            _cnt = _intUv;
-            _coupsPossibles.Push("Ciseaux");
-            _coupsPossibles.Push("Feuille");
-            _coupsPossibles.Push("Pierre");
-            return Input().StartsWith(Exit);
-        }
-
         public void LaunchGame(string[] args, Action<string> Output, Func<string> InputPlayer, Func<int> InputComputer)
         {
-
-            bool roxorMoMode = false;
-            if (args.Any())
-            {
-                if (args[0].Equals("roxor"))
-                {
-                    roxorMoMode = true;
-                }
-            }
+            var roxorMoMode = args.FirstOrDefault() == "roxor";
 
             Output("Bienvenue dans mon chifumi, ici c'est un appli de ROXXXXXXXXXXXXXXXOOR!");
             Output("Taper sur la touche entrée pour commencer une partie, ou 'exit' pour quitter.");
-            while (!Initialize(InputPlayer))
+
+            while (!InputPlayer().StartsWith("exit"))
             {
                 Output("Veuillez choisir un signe:");
-                for (int i = 0, _cnt = 0; i < _coupsPossibles.Count; i++)
-                {
-                    Output(++_cnt + "- " + _coupsPossibles.ToArray()[_cnt - 1]);
-                }
-                var intUs = (char)(InputPlayer()[0] - 48);
+                Output("1- Pierre");
+                Output("2- Feuille");
+                Output("3- Ciseaux");
 
-                _intUv = InputComputer();
+                var playerMove = int.Parse(InputPlayer().Substring(0, 1));
+                var computerMove = InputComputer();
 
-                if (roxorMoMode != Rmdi && _intUv == 1)
+                if (roxorMoMode && computerMove == 1)
                 {
                     Output("Tu es un roxor contre Pierre");
                     Output("Gagne!");
                 }
-                else if (intUs == 1 && _intUv == 1)
+                else if (playerMove == 1 && computerMove == 1)
                 {
                     Output("Pierre contre Pierre!");
                     Output("Egalite!");
                 }
-                else if (roxorMoMode != Rmdi && _intUv == 2)
+                else if (roxorMoMode && computerMove == 2)
                 {
                     Output("Tu es un roxor contre Feuille");
                     Output("Gagne!");
                 }
-                else if (intUs - 1 == _intUv % 2)
+                else if (playerMove - 1 == computerMove % 2)
                 {
                     Output("Pierre contre Feuille!");
                     Output("Perdu!");
                 }
-                else if (roxorMoMode != Rmdi && _intUv == 3)
+                else if (roxorMoMode && computerMove == 3)
                 {
                     Output("Tu es un roxor contre Ciseaux");
                     Output("Gagne!");
                 }
-                else if (intUs == 1 && _intUv == 3)
+                else if (playerMove == 1 && computerMove == 3)
                 {
                     Output("Pierre contre Ciseaux!");
                     Output("Gagne!");
                 }
-                else if (roxorMoMode != Rmdi && _intUv == 2)
+                else if (roxorMoMode && computerMove == 2)
                 {
                     Output("Tu es un roxor contre Feuille");
                     Output("Gagne!");
                 }
-                else if (intUs == 2 && _intUv == 1)
+                else if (playerMove == 2 && computerMove == 1)
                 {
                     Output("Feuille contre Pierre!");
                     Output("Gagne!");
                 }
-                else if (intUs == 2 && _intUv == 2)
+                else if (playerMove == 2 && computerMove == 2)
                 {
                     Output("Feuille contre Feuille!");
                     Output("Egalite!");
                 }
-                else if (intUs == 2 && _intUv == 3)
+                else if (playerMove == 2 && computerMove == 3)
                 {
                     Output("Feuille contre Ciseaux!");
                     Output("Perdu!");
                 }
-                else if (roxorMoMode != false && _intUv == 3)
+                else if (roxorMoMode != false && computerMove == 3)
                 {
                     Output("Tu es un roxor contre Ciseaux");
                     Output("Gagne!");
                 }
-                else if (intUs == 3 && _intUv == 1)
+                else if (playerMove == 3 && computerMove == 1)
                 {
                     Output("Ciseaux contre Pierre!");
                     Output("Perdu!");
                 }
-                else if (intUs == 3 && _intUv % 2 == 0)
+                else if (playerMove == 3 && computerMove % 2 == 0)
                 {
                     Output("Ciseaux contre Feuille!");
                     Output("Gagne!");
                 }
-                else if (intUs == _intUv)
+                else if (playerMove == computerMove)
                 {
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");
                 }
-                else if (intUs == 3 && _intUv == 4)
+                else if (playerMove == 3 && computerMove == 4)
                 {
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");
                 }
-                else if (intUs == 3 && _intUv == 5)
+                else if (playerMove == 3 && computerMove == 5)
                 {
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");
                 }
-                else if (intUs == 4 && _intUv == 4)
+                else if (playerMove == 4 && computerMove == 4)
                 {
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");

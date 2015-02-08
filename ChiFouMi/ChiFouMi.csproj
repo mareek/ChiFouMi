@@ -42,8 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGame.cs" />
-    <Compile Include="NewGame.cs" />
     <Compile Include="OldGame.cs" />
+    <Compile Include="NewGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

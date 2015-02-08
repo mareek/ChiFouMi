@@ -13,6 +13,13 @@ namespace ChiFouMi
             Ciseaux = 3
         }
 
+        private static readonly Dictionary<Move, Move[]> BeatenDictionnary = new Dictionary<Move, Move[]>
+        {
+            { Move.Pierre, new []{ Move.Feuille } },
+            { Move.Feuille, new []{ Move.Ciseaux } },
+            { Move.Ciseaux, new []{ Move.Pierre } }
+        };
+
         private readonly Action<string> Output;
 
         public CleanGame(Action<string> outputMethod)
@@ -66,17 +73,7 @@ namespace ChiFouMi
 
         private bool IsBeatenBy(Move playerMove, Move computerMove)
         {
-            switch (playerMove)
-            {
-                case Move.Pierre:
-                    return computerMove == Move.Feuille;
-                case Move.Feuille:
-                    return computerMove == Move.Ciseaux;
-                case Move.Ciseaux:
-                    return computerMove == Move.Pierre;
-                default:
-                    return false;
-            }
+            return BeatenDictionnary[playerMove].Contains(computerMove);
         }
 
         private void OutputOutcome(Move playerMove, Move computerMove, string outcome)

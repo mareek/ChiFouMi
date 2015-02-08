@@ -10,15 +10,6 @@ namespace ChiFouMi.Test
     public class NonRegressionTest
     {
         [TestMethod]
-        public void GivenAllPossiblesCorrectInputsWhenExecutingNewAndOldGameSideBySideThenEnsureOutputAreIdentical()
-        {
-            var playerMoves = new[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
-            var computerMoves = new[] { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
-
-            AssertOldAndNewGamesAreEqual(new string[0], playerMoves, computerMoves);
-        }
-
-        [TestMethod]
         public void GivenAllNonBuggyInputsWhenExecutingCleanAndOldGameSideBySideThenEnsureOutputAreIdentical()
         {
             //Buggy inputs : [2,1] and [2,3]
@@ -32,13 +23,46 @@ namespace ChiFouMi.Test
         public void GivenAllNonBuggyInputsWhenExecutingCleanAndOldGameSideBySideInRoxorModeThenEnsureOutputAreIdentical()
         {
             //buggy input : [2,3]
-            var playerMoves =   new[] { 1, 1, 1, 2, 2, 3, 3, 3 };
+            var playerMoves = new[] { 1, 1, 1, 2, 2, 3, 3, 3 };
             var computerMoves = new[] { 1, 2, 3, 1, 2, 1, 2, 3 };
 
-            for (int i = 0; i < playerMoves.Length; i++)
+            AssertOldAndCleanGamesAreEqual(new[] { "roxor" }, playerMoves, computerMoves);
+        }
+
+        [TestMethod]
+        public void GivenAllLegalValuesWhenExecuteCleanGameThenNoExceptionIsThrown()
+        {
+            foreach (int i in Enum.GetValues(typeof(Move)))
             {
-                AssertOldAndCleanGamesAreEqual(new[] { "roxor" }, new[] { playerMoves[i] }, new[] { computerMoves[i] });
+                foreach (int j in Enum.GetValues(typeof(Move)))
+                {
+                    ExecuteGame(f => new CleanGame(f), new string[0], new[] { i }, new[] { j });
+                    ExecuteGame(f => new CleanGame(f), new[] { "roxor" }, new[] { i }, new[] { j });
+                }
             }
+        }
+
+        [TestMethod]
+        public void GivenCrapWhenExecuteCleanGameThenNoExceptionIsThrown()
+        {
+            object[] crapload = { "", -1, "Papier", "Bazinga !", 40.42, 5, 8, DateTime.Now, int.MaxValue, int.MinValue };
+            foreach (var crap in crapload)
+            {
+                foreach (int j in Enum.GetValues(typeof(Move)))
+                {
+                    ExecuteGame(f => new CleanGame(f), new string[0], new[] { crap }, new[] { j });
+                    ExecuteGame(f => new CleanGame(f), new[] { "roxor" }, new[] { crap }, new[] { j });
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenAllPossiblesCorrectInputsWhenExecutingNewAndOldGameSideBySideThenEnsureOutputAreIdentical()
+        {
+            var playerMoves = new[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
+            var computerMoves = new[] { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
+
+            AssertOldAndNewGamesAreEqual(new string[0], playerMoves, computerMoves);
         }
 
         [TestMethod]
@@ -95,7 +119,7 @@ namespace ChiFouMi.Test
             Assert.AreEqual(oldGameOutput, cleanGameOutput);
         }
 
-        private string ExecuteGame(Func<Action<string>, IGame> gameConstructor, string[] args, IList<int> playerMoves, IList<int> computerMoves)
+        private string ExecuteGame<T>(Func<Action<string>, IGame> gameConstructor, string[] args, IList<T> playerMoves, IList<int> computerMoves)
         {
             var outputBuilder = new StringBuilder();
             Action<string> output = val => outputBuilder.AppendLine(val);

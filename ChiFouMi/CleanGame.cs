@@ -4,15 +4,15 @@ using System.Linq;
 
 namespace ChiFouMi
 {
+    public enum Move
+    {
+        Pierre = 1,
+        Feuille = 2,
+        Ciseaux = 3
+    }
+
     public class CleanGame : IGame
     {
-        private enum Move
-        {
-            Pierre = 1,
-            Feuille = 2,
-            Ciseaux = 3
-        }
-
         private static readonly Dictionary<Move, Move[]> BeatenDictionnary = new Dictionary<Move, Move[]>
         {
             { Move.Pierre, new []{ Move.Feuille } },

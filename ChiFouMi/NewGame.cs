@@ -55,30 +55,10 @@ namespace ChiFouMi
                     Output("Pierre contre Ciseaux!");
                     Output("Gagne!");
                 }
-                else if (roxorMoMode && computerMove == 2)
-                {
-                    Output("Tu es un roxor contre Feuille");
-                    Output("Gagne!");
-                }
-                else if (playerMove == 2 && computerMove == 1)
-                {
-                    Output("Feuille contre Pierre!");
-                    Output("Gagne!");
-                }
                 else if (playerMove == 2 && computerMove == 2)
                 {
                     Output("Feuille contre Feuille!");
                     Output("Egalite!");
-                }
-                else if (playerMove == 2 && computerMove == 3)
-                {
-                    Output("Feuille contre Ciseaux!");
-                    Output("Perdu!");
-                }
-                else if (roxorMoMode != false && computerMove == 3)
-                {
-                    Output("Tu es un roxor contre Ciseaux");
-                    Output("Gagne!");
                 }
                 else if (playerMove == 3 && computerMove == 1)
                 {
@@ -95,17 +75,7 @@ namespace ChiFouMi
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");
                 }
-                else if (playerMove == 3 && computerMove == 4)
-                {
-                    Output("Ciseaux contre Ciseaux!");
-                    Output("Egalite!");
-                }
                 else if (playerMove == 3 && computerMove == 5)
-                {
-                    Output("Ciseaux contre Ciseaux!");
-                    Output("Egalite!");
-                }
-                else if (playerMove == 4 && computerMove == 4)
                 {
                     Output("Ciseaux contre Ciseaux!");
                     Output("Egalite!");

@@ -41,16 +41,17 @@ namespace ChiFouMi.Test
         [TestMethod]
         public void GivenNonStandardInputWhenExecuteNewAndOldGameSideBySideThenResultAreEquals()
         {
-            AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(new string[0], Enumerable.Range(0, 10).ToArray());
+            AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(Enumerable.Range(0, 10).ToArray());
         }
 
-        private void AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(string[] args, int[] possibleValues)
+        private void AssertGamesAreEqualGivenAllPossibleCombinaisonOfPossibleValues(int[] possibleValues)
         {
             foreach (var i in possibleValues)
             {
                 foreach (var j in possibleValues)
                 {
-                    AssertGamesAreEqual(args, new[] { i }, new[] { j });
+                    AssertGamesAreEqual(new[] { "roxor" }, new[] { i }, new[] { j });
+                    AssertGamesAreEqual(new string[0], new[] { i }, new[] { j });
                 }
             }
         }

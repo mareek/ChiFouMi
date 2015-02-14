@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Text;
+using NFluent;
 
 namespace ChiFouMi.Test
 {
@@ -30,19 +31,6 @@ namespace ChiFouMi.Test
         }
 
         [TestMethod]
-        public void GivenAllLegalValuesWhenExecuteNewGameThenNoExceptionIsThrown()
-        {
-            foreach (int i in Enum.GetValues(typeof(Move)))
-            {
-                foreach (int j in Enum.GetValues(typeof(Move)))
-                {
-                    ExecuteGame(f => new Game(f), new string[0], new[] { i }, new[] { j });
-                    ExecuteGame(f => new Game(f), new[] { "roxor" }, new[] { i }, new[] { j });
-                }
-            }
-        }
-
-        [TestMethod]
         public void GivenCrapWhenExecuteNewGameThenNoExceptionIsThrown()
         {
             object[] crapload = { "", -1, "Papier", "Bazinga !", 40.42, 5, 8, DateTime.Now, int.MaxValue, int.MinValue };
@@ -50,8 +38,49 @@ namespace ChiFouMi.Test
             {
                 foreach (int j in Enum.GetValues(typeof(Move)))
                 {
-                    ExecuteGame(f => new Game(f), new string[0], new[] { crap }, new[] { j });
-                    ExecuteGame(f => new Game(f), new[] { "roxor" }, new[] { crap }, new[] { j });
+                    Check.ThatCode(() => ExecuteGame(f => new Game(f), new string[0], new[] { crap }, new[] { j })).Not.ThrowsAny();
+                    Check.ThatCode(() => ExecuteGame(f => new Game(f), new[] { "roxor" }, new[] { crap }, new[] { j })).Not.ThrowsAny();
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenEveryPossibleInputsWhenExecuteGameInRoxorModeThenPlayerAlwaysWin()
+        {
+            foreach (int i in Enum.GetValues(typeof(Move)))
+            {
+                foreach (int j in Enum.GetValues(typeof(Move)))
+                {
+                    var result = ExecuteGame(f => new Game(f), new[] { "roxor" }, new[] { i }, new[] { j });
+                    Check.That(result).Contains("roxor");
+                    Check.That(result).Contains("Gagne");
+                    Check.That(result).Not.Contains("Egalite");
+                    Check.That(result).Not.Contains("Perdu");
+                }
+            }
+        }
+
+        [TestMethod]
+        public void GivenEveryPossibleInputsWhenExecuteGameThenResultsAreCoherent()
+        {
+            foreach (int i in Enum.GetValues(typeof(Move)))
+            {
+                foreach (int j in Enum.GetValues(typeof(Move)))
+                {
+                    if (i == j)
+                    {
+                        var result = ExecuteGame(f => new Game(f), new string[0], new[] { i }, new[] { i });
+                        Check.That(result).Contains("Egalite");
+                        Check.That(result).Not.Contains("Perdu");
+                        Check.That(result).Not.Contains("Gagne");
+                    }
+                    else
+                    {
+                        var result = ExecuteGame(f => new Game(f), new string[0], new[] { i, j }, new[] { j, i });
+                        Check.That(result).Contains("Perdu");
+                        Check.That(result).Contains("Gagne");
+                        Check.That(result).Not.Contains("Egalite");
+                    }
                 }
             }
         }
@@ -59,9 +88,9 @@ namespace ChiFouMi.Test
         private void AssertOldAndNewGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
         {
             var oldGameOutput = ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
-            var NewGameOutput = ExecuteGame(f => new Game(f), args, playerMoves, computerMoves);
+            var newGameOutput = ExecuteGame(f => new Game(f), args, playerMoves, computerMoves);
 
-            Assert.AreEqual(oldGameOutput, NewGameOutput);
+            Check.That(newGameOutput).IsEqualTo(oldGameOutput);
         }
 
         private string ExecuteGame<T>(Func<Action<string>, IGame> gameConstructor, string[] args, IList<T> playerMoves, IList<int> computerMoves)

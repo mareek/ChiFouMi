@@ -11,7 +11,7 @@ namespace ChiFouMi
         Ciseaux = 3
     }
 
-    public class CleanGame : IGame
+    public class Game : IGame
     {
         private static readonly Dictionary<Move, Move[]> BeatenDictionnary = new Dictionary<Move, Move[]>
         {
@@ -22,7 +22,7 @@ namespace ChiFouMi
 
         private readonly Action<string> Output;
 
-        public CleanGame(Action<string> outputMethod)
+        public Game(Action<string> outputMethod)
         {
             Output = outputMethod;
         }

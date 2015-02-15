@@ -56,6 +56,7 @@
     <Compile Include="NonRegressionTest.cs" />
     <Compile Include="OldGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GameTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChiFouMi\ChiFouMi.csproj">

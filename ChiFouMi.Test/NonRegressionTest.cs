@@ -29,7 +29,7 @@ namespace ChiFouMi.Test
         private void AssertOldAndNewGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
         {
             var oldGameOutput = GameTest.ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
-            var newGameOutput = GameTest.ExecuteGame(f => new Game(f), args, playerMoves, computerMoves);
+            var newGameOutput = GameTest.ExecuteGame(f => new Game(f, 3), args, playerMoves, computerMoves);
 
             Check.That(newGameOutput).IsEqualTo(oldGameOutput);
         }

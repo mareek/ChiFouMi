@@ -15,7 +15,7 @@ namespace ChiFouMi
                 return rand.Next(1, 4).ToString()[0] - 48;
             };
 
-            new Game(Console.WriteLine).PlayGame(args, InputPlayer, InputComputer);
+            new Game(Console.WriteLine, 5).PlayGame(args, InputPlayer, InputComputer);
         }
     }
 }

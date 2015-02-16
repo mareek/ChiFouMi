@@ -33,17 +33,9 @@ namespace ChiFouMi
             return Input().StartsWith(Exit);
         }
 
-        public void PlayGame(string[] args, Func<string> InputPlayer, Func<int> InputComputer)
+        public void PlayGame(bool roxorMode, Func<string> InputPlayer, Func<int> InputComputer)
         {
-
-            bool roxorMoMode = false;
-            if (args.Any())
-            {
-                if (args[0].Equals("roxor"))
-                {
-                    roxorMoMode = true;
-                }
-            }
+            bool roxorMoMode = roxorMode;
 
             Output("Bienvenue dans mon chifumi, ici c'est un appli de ROXXXXXXXXXXXXXXXOOR!");
             Output("Taper sur la touche entrée pour commencer une partie, ou 'exit' pour quitter.");

@@ -3,6 +3,6 @@ namespace ChiFouMi
 {
     public interface IGame
     {
-        void PlayGame(string[] args, Func<string> InputPlayer, Func<int> InputComputer);
+        void PlayGame(bool roxorMode, Func<string> InputPlayer, Func<int> InputComputer);
     }
 }

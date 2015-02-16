@@ -1,59 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ChiFouMi
 {
-    public enum Move
-    {
-        Pierre = 1,
-        Feuille = 2,
-        Ciseaux = 3,
-        Lézard = 4,
-        Spock = 5,
-    }
-
     public class Game : IGame
     {
-        private static readonly Dictionary<Move, Move[]> BeatenDictionnary = new Dictionary<Move, Move[]>
-        {
-            { Move.Pierre, new []{ Move.Feuille, Move.Spock } },
-            { Move.Feuille, new []{ Move.Ciseaux, Move.Lézard } },
-            { Move.Ciseaux, new []{ Move.Pierre, Move.Spock } },
-            { Move.Lézard, new []{ Move.Pierre, Move.Ciseaux } },
-            { Move.Spock, new []{ Move.Feuille, Move.Lézard } },
-        };
-
         private readonly Action<string> Output;
-        private readonly int _maxInput;
+        private readonly int[] _validInputs;
 
         public Game(Action<string> outputMethod, int maxInput)
         {
             Output = outputMethod;
-            _maxInput = maxInput;
+            _validInputs = Enumerable.Range(1, maxInput).ToArray();
         }
 
-        public void PlayGame(string[] args, Func<string> InputPlayer, Func<int> InputComputer)
+        public void PlayGame(bool roxorMode, Func<string> InputPlayer, Func<int> InputComputer)
         {
-            var roxorMode = args.FirstOrDefault() == "roxor";
-
             Output("Bienvenue dans mon chifumi, ici c'est un appli de ROXXXXXXXXXXXXXXXOOR!");
             Output("Taper sur la touche entrée pour commencer une partie, ou 'exit' pour quitter.");
 
             while (!InputPlayer().StartsWith("exit"))
             {
                 Output("Veuillez choisir un signe:");
-                foreach (Move move in Enum.GetValues(typeof(Move)))
+                foreach (var move in _validInputs)
                 {
-                    if (_maxInput >= (int)move)
-                    {
-                        Output(((int)move) + "- " + move);
-                    }
+                    Output(move + "- " + (Move)move);
                 }
 
                 int playerMove;
-                if (int.TryParse(InputPlayer(), out playerMove)
-                    && 0 < playerMove && playerMove <= _maxInput)
+                if (int.TryParse(InputPlayer(), out playerMove) && _validInputs.Contains(playerMove))
                 {
                     PlayTurn(roxorMode, (Move)playerMove, (Move)InputComputer());
                 }
@@ -70,7 +45,7 @@ namespace ChiFouMi
             {
                 OutputOutcome(playerMove, computerMove, "Egalite");
             }
-            else if (IsBeatenBy(playerMove, computerMove))
+            else if (playerMove.IsBeatenBy(computerMove))
             {
                 OutputOutcome(playerMove, computerMove, "Perdu");
             }
@@ -78,11 +53,6 @@ namespace ChiFouMi
             {
                 OutputOutcome(playerMove, computerMove, "Gagne");
             }
-        }
-
-        private bool IsBeatenBy(Move playerMove, Move computerMove)
-        {
-            return BeatenDictionnary[playerMove].Contains(computerMove);
         }
 
         private void OutputOutcome(Move playerMove, Move computerMove, string outcome)

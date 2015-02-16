@@ -18,8 +18,8 @@ namespace ChiFouMi.Test
             {
                 foreach (int j in Enum.GetValues(typeof(Move)))
                 {
-                    Check.ThatCode(() => ExecuteGame(f => new Game(f, 5), new string[0], new[] { crap }, new[] { j })).Not.ThrowsAny();
-                    Check.ThatCode(() => ExecuteGame(f => new Game(f, 5), new[] { "roxor" }, new[] { crap }, new[] { j })).Not.ThrowsAny();
+                    Check.ThatCode(() => ExecuteGame(f => new Game(f, 5), false, new[] { crap }, new[] { j })).Not.ThrowsAny();
+                    Check.ThatCode(() => ExecuteGame(f => new Game(f, 5), true, new[] { crap }, new[] { j })).Not.ThrowsAny();
                 }
             }
         }
@@ -31,7 +31,7 @@ namespace ChiFouMi.Test
             {
                 foreach (int j in Enum.GetValues(typeof(Move)))
                 {
-                    var result = ExecuteGame(f => new Game(f, 5), new[] { "roxor" }, new[] { i }, new[] { j });
+                    var result = ExecuteGame(f => new Game(f, 5), true, new[] { i }, new[] { j });
                     Check.That(result).Contains("roxor");
                     Check.That(result).Contains("Gagne");
                     Check.That(result).Not.Contains("Egalite");
@@ -49,14 +49,14 @@ namespace ChiFouMi.Test
                 {
                     if (i == j)
                     {
-                        var result = ExecuteGame(f => new Game(f, 5), new string[0], new[] { i }, new[] { i });
+                        var result = ExecuteGame(f => new Game(f, 5), false, new[] { i }, new[] { i });
                         Check.That(result).Contains("Egalite");
                         Check.That(result).Not.Contains("Perdu");
                         Check.That(result).Not.Contains("Gagne");
                     }
                     else
                     {
-                        var result = ExecuteGame(f => new Game(f, 5), new string[0], new[] { i, j }, new[] { j, i });
+                        var result = ExecuteGame(f => new Game(f, 5), false, new[] { i, j }, new[] { j, i });
                         Check.That(result).Contains("Perdu");
                         Check.That(result).Contains("Gagne");
                         Check.That(result).Not.Contains("Egalite");
@@ -68,23 +68,23 @@ namespace ChiFouMi.Test
         [TestMethod]
         public void GivenFewKnownTestWhenExecuteGameThenResultsAreCorrects()
         {
-            var result = ExecuteGame(f => new Game(f, 5), new string[0], new[] { 5 }, new[] { 4 });
+            var result = ExecuteGame(f => new Game(f, 5), false, new[] { 5 }, new[] { 4 });
             Check.That(result).Contains("Spock");
             Check.That(result).Contains("Lézard");
             Check.That(result).Contains("Perdu");
 
-            result = ExecuteGame(f => new Game(f, 5), new string[0], new[] { 5 }, new[] { 3 });
+            result = ExecuteGame(f => new Game(f, 5), false, new[] { 5 }, new[] { 3 });
             Check.That(result).Contains("Spock");
             Check.That(result).Contains("Ciseaux");
             Check.That(result).Contains("Gagne");
 
-            result = ExecuteGame(f => new Game(f, 5), new string[0], new[] { 4 }, new[] { 3 });
+            result = ExecuteGame(f => new Game(f, 5), false, new[] { 4 }, new[] { 3 });
             Check.That(result).Contains("Lézard");
             Check.That(result).Contains("Ciseaux");
             Check.That(result).Contains("Perdu");
         }
 
-        public static string ExecuteGame<T>(Func<Action<string>, IGame> gameConstructor, string[] args, IList<T> playerMoves, IList<int> computerMoves)
+        public static string ExecuteGame<T>(Func<Action<string>, IGame> gameConstructor, bool roxorMode, IList<T> playerMoves, IList<int> computerMoves)
         {
             var outputBuilder = new StringBuilder();
             Action<string> output = val => outputBuilder.AppendLine(val);
@@ -99,7 +99,7 @@ namespace ChiFouMi.Test
             int iComputer = 0;
             Func<int> getComputerInput = () => computerMoves[iComputer++];
 
-            gameConstructor(output).PlayGame(args, getPlayerInput, getComputerInput);
+            gameConstructor(output).PlayGame(roxorMode, getPlayerInput, getComputerInput);
 
             return outputBuilder.ToString();
         }

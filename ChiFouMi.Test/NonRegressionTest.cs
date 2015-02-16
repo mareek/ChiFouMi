@@ -13,7 +13,7 @@ namespace ChiFouMi.Test
             var playerMoves = new[] { 1, 1, 1, 2, 3, 3, 3 };
             var computerMoves = new[] { 1, 2, 3, 2, 1, 2, 3 };
 
-            AssertOldAndNewGamesAreEqual(new string[0], playerMoves, computerMoves);
+            AssertOldAndNewGamesAreEqual(false, playerMoves, computerMoves);
         }
 
         [TestMethod]
@@ -23,13 +23,13 @@ namespace ChiFouMi.Test
             var playerMoves = new[] { 1, 1, 1, 2, 2, 3, 3, 3 };
             var computerMoves = new[] { 1, 2, 3, 1, 2, 1, 2, 3 };
 
-            AssertOldAndNewGamesAreEqual(new[] { "roxor" }, playerMoves, computerMoves);
+            AssertOldAndNewGamesAreEqual(true, playerMoves, computerMoves);
         }
 
-        private void AssertOldAndNewGamesAreEqual(string[] args, int[] playerMoves, int[] computerMoves)
+        private void AssertOldAndNewGamesAreEqual(bool roxorMode, int[] playerMoves, int[] computerMoves)
         {
-            var oldGameOutput = GameTest.ExecuteGame(f => new OldGame(f), args, playerMoves, computerMoves);
-            var newGameOutput = GameTest.ExecuteGame(f => new Game(f, 3), args, playerMoves, computerMoves);
+            var oldGameOutput = GameTest.ExecuteGame(f => new OldGame(f), roxorMode, playerMoves, computerMoves);
+            var newGameOutput = GameTest.ExecuteGame(f => new Game(f, 3), roxorMode, playerMoves, computerMoves);
 
             Check.That(newGameOutput).IsEqualTo(oldGameOutput);
         }

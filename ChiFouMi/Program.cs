@@ -6,16 +6,17 @@ namespace ChiFouMi
 {
     class Program
     {
+        private const int MaxInput = 5;
+
         static void Main(string[] args)
         {
-            Func<string> InputPlayer = Console.ReadLine;
-            Func<int> InputComputer = () =>
-            {
-                var rand = new Random(DateTime.Now.Millisecond);
-                return rand.Next(1, 4).ToString()[0] - 48;
-            };
+            var rand = new Random(DateTime.Now.Millisecond);
 
-            new Game(Console.WriteLine, 5).PlayGame(args, InputPlayer, InputComputer);
+            Func<string> InputPlayer = Console.ReadLine;
+            Func<int> InputComputer = () => rand.Next(1, MaxInput + 1);
+
+            var roxorMode = args.FirstOrDefault() == "roxor";
+            new Game(Console.WriteLine, 5).PlayGame(roxorMode, InputPlayer, InputComputer);
         }
     }
 }

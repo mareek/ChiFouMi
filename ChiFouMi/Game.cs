@@ -16,8 +16,8 @@ namespace ChiFouMi
 
         public void PlayGame(bool roxorMode, Func<string> InputPlayer, Func<int> InputComputer)
         {
-            Output("Bienvenue dans mon chifumi, ici c'est un appli de ROXXXXXXXXXXXXXXXOOR!");
-            Output("Taper sur la touche entrée pour commencer une partie, ou 'exit' pour quitter.");
+            Output("Bienvenue dans mon chifumi, ici c'est un appli de ROXXXXXXXXXXXXXXXOOR!\r\n"
+                 + "Taper sur la touche entrée pour commencer une partie, ou 'exit' pour quitter.");
 
             while (!InputPlayer().StartsWith("exit"))
             {
@@ -57,14 +57,12 @@ namespace ChiFouMi
 
         private void OutputOutcome(Move playerMove, Move computerMove, string outcome)
         {
-            Output(playerMove + " contre " + computerMove + "!");
-            Output(outcome + "!");
+            Output(playerMove + " contre " + computerMove + "!\r\n" + outcome + "!");
         }
 
         private void OutputRoxor(Move computerMove)
         {
-            Output("Tu es un roxor contre " + computerMove);
-            Output("Gagne!");
+            Output("Tu es un roxor contre " + computerMove + "\r\nGagne!");
         }
     }
 }

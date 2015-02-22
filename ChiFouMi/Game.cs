@@ -39,7 +39,7 @@ namespace ChiFouMi
         {
             if (roxorMode)
             {
-                OutputRoxor(computerMove);
+                Output("Tu es un roxor contre " + computerMove + "\r\nGagne!");
             }
             else if (playerMove == computerMove)
             {
@@ -58,11 +58,6 @@ namespace ChiFouMi
         private void OutputOutcome(Move playerMove, Move computerMove, string outcome)
         {
             Output(playerMove + " contre " + computerMove + "!\r\n" + outcome + "!");
-        }
-
-        private void OutputRoxor(Move computerMove)
-        {
-            Output("Tu es un roxor contre " + computerMove + "\r\nGagne!");
         }
     }
 }

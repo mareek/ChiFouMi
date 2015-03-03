@@ -10,8 +10,8 @@ namespace ChiFouMi.Test
         public void GivenAllNonBuggyInputsWhenExecutingNewAndOldGameSideBySideThenEnsureOutputAreIdentical()
         {
             //Buggy inputs : [2,1] and [2,3]
-            var playerMoves = new[] { 1, 1, 1, 2, 3, 3, 3 };
-            var computerMoves = new[] { 1, 2, 3, 2, 1, 2, 3 };
+            var playerMoves = new[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
+            var computerMoves = new[] { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
 
             AssertOldAndNewGamesAreEqual(false, playerMoves, computerMoves);
         }
@@ -20,8 +20,8 @@ namespace ChiFouMi.Test
         public void GivenAllNonBuggyInputsWhenExecutingNewAndOldGameSideBySideInRoxorModeThenEnsureOutputAreIdentical()
         {
             //buggy input : [2,3]
-            var playerMoves = new[] { 1, 1, 1, 2, 2, 3, 3, 3 };
-            var computerMoves = new[] { 1, 2, 3, 1, 2, 1, 2, 3 };
+            var playerMoves = new[] { 1, 1, 1, 2, 2, 2, 3, 3, 3 };
+            var computerMoves = new[] { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
 
             AssertOldAndNewGamesAreEqual(true, playerMoves, computerMoves);
         }

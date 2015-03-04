@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChiFouMi
+namespace ChiFouMi.Test
 {
     public class OldGame : IGame
     {
@@ -21,7 +18,6 @@ namespace ChiFouMi
         {
             Output = outputMethod;
         }
-
 
         private bool Initialize(Func<string> Input)
         {

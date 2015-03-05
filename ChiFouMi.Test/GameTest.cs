@@ -31,14 +31,11 @@ namespace ChiFouMi.Test
             {
                 foreach (int j in Enum.GetValues(typeof(Move)))
                 {
-                    if (!Game.IsBuggyBehaviour(true, (Move)i, (Move)j))
-                    {
-                        var result = ExecuteGame(f => new Game(f, 5), true, new[] { i }, new[] { j });
-                        Check.That(result).Contains("roxor");
-                        Check.That(result).Contains("Gagne");
-                        Check.That(result).Not.Contains("Egalite");
-                        Check.That(result).Not.Contains("Perdu");
-                    }
+                    var result = ExecuteGame(f => new Game(f, 5), true, new[] { i }, new[] { j });
+                    Check.That(result).Contains("roxor");
+                    Check.That(result).Contains("Gagne");
+                    Check.That(result).Not.Contains("Egalite");
+                    Check.That(result).Not.Contains("Perdu");
                 }
             }
         }
@@ -57,7 +54,7 @@ namespace ChiFouMi.Test
                         Check.That(result).Not.Contains("Perdu");
                         Check.That(result).Not.Contains("Gagne");
                     }
-                    else if (!Game.IsBuggyBehaviour(false, (Move)i, (Move)j) && !Game.IsBuggyBehaviour(false, (Move)j, (Move)i))
+                    else
                     {
                         var result = ExecuteGame(f => new Game(f, 5), false, new[] { i, j }, new[] { j, i });
                         Check.That(result).Contains("Perdu");

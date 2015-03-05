@@ -28,10 +28,23 @@ namespace ChiFouMi.Test
 
         private void AssertOldAndNewGamesAreEqual(bool roxorMode, int[] playerMoves, int[] computerMoves)
         {
-            var oldGameOutput = GameTest.ExecuteGame(f => new OldGame(f), roxorMode, playerMoves, computerMoves);
-            var newGameOutput = GameTest.ExecuteGame(f => new Game(f, 3), roxorMode, playerMoves, computerMoves);
+            for (int i = 0; i < playerMoves.Length; i++)
+            {
+                int playerMove = playerMoves[i];
+                int computerMove = computerMoves[i];
+                if (!IsBuggyBehaviour(roxorMode, playerMove, computerMove))
+                {
+                    var oldGameOutput = GameTest.ExecuteGame(f => new OldGame(f), roxorMode, new[] { playerMove }, new[] { computerMove });
+                    var newGameOutput = GameTest.ExecuteGame(f => new Game(f, 3), roxorMode, new[] { playerMove }, new[] { computerMove });
 
-            Check.That(newGameOutput).IsEqualTo(oldGameOutput);
+                    Check.That(newGameOutput).IsEqualTo(oldGameOutput);
+                }
+            }
+        }
+
+        public static bool IsBuggyBehaviour(bool roxorMode, int playerMove, int computerMove)
+        {
+            return playerMove == 2 && (computerMove == 3 || !roxorMode && computerMove == 1);
         }
     }
 }

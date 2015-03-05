@@ -23,7 +23,7 @@ namespace ChiFouMi
             {
                 DisplayMoveChoice();
 
-                GetMoveAndPlayTurn(roxorMode, InputPlayer(), InputComputer());
+                ReadMoveAndPlayTurn(roxorMode, InputPlayer(), InputComputer());
             }
         }
 
@@ -36,7 +36,7 @@ namespace ChiFouMi
             }
         }
 
-        private void GetMoveAndPlayTurn(bool roxorMode, string inputPlayer, int inputComputer)
+        private void ReadMoveAndPlayTurn(bool roxorMode, string inputPlayer, int inputComputer)
         {
             int playerMove;
             if (int.TryParse(inputPlayer, out playerMove) && _validInputs.Contains(playerMove))
@@ -47,11 +47,7 @@ namespace ChiFouMi
 
         private void PlayTurn(bool roxorMode, Move playerMove, Move computerMove)
         {
-            if (IsBuggyBehaviour(roxorMode, playerMove, computerMove))
-            {
-                OutputOutcome(Move.Pierre, Move.Feuille, "Perdu");
-            }
-            else if (roxorMode)
+            if (roxorMode)
             {
                 Output("Tu es un roxor contre " + computerMove + "\r\nGagne!");
             }
@@ -67,11 +63,6 @@ namespace ChiFouMi
             {
                 OutputOutcome(playerMove, computerMove, "Gagne");
             }
-        }
-
-        public static bool IsBuggyBehaviour(bool roxorMode, Move playerMove, Move computerMove)
-        {
-            return playerMove == Move.Feuille && (computerMove == Move.Ciseaux || !roxorMode && computerMove == Move.Pierre);
         }
 
         private void OutputOutcome(Move playerMove, Move computerMove, string outcome)

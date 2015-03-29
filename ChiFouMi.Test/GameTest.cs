@@ -41,46 +41,42 @@ namespace ChiFouMi.Test
         }
 
         [TestMethod]
-        public void GivenEveryPossibleInputsWhenExecuteGameThenResultsAreCoherent()
+        public void GivenEveryMovesWhenExecuteGameWithIdenticalMovesThenResultsIsAlwaysDraw()
         {
             foreach (int i in Enum.GetValues(typeof(Move)))
             {
-                foreach (int j in Enum.GetValues(typeof(Move)))
-                {
-                    if (i == j)
-                    {
-                        var result = ExecuteGame(f => new Game(f, 5), false, new[] { i }, new[] { i });
-                        Check.That(result).Contains("Egalite");
-                        Check.That(result).Not.Contains("Perdu");
-                        Check.That(result).Not.Contains("Gagne");
-                    }
-                    else
-                    {
-                        var result = ExecuteGame(f => new Game(f, 5), false, new[] { i, j }, new[] { j, i });
-                        Check.That(result).Contains("Perdu");
-                        Check.That(result).Contains("Gagne");
-                        Check.That(result).Not.Contains("Egalite");
-                    }
-                }
+                var result = ExecuteGame(f => new Game(f, 5), false, new[] { i }, new[] { i });
+                Check.That(result).Contains("Egalite");
+                Check.That(result).Not.Contains("Perdu");
+                Check.That(result).Not.Contains("Gagne");
             }
         }
-
+        
         [TestMethod]
-        public void GivenFewKnownTestWhenExecuteGameThenResultsAreCorrects()
+        public void CheckAllPossibleCombination()
         {
-            var result = ExecuteGame(f => new Game(f, 5), false, new[] { 5 }, new[] { 4 });
-            Check.That(result).Contains("Spock");
-            Check.That(result).Contains("Lézard");
-            Check.That(result).Contains("Perdu");
+            ExacuteGameAndCheckResult(Move.Pierre,  Move.Ciseaux);
+            ExacuteGameAndCheckResult(Move.Pierre,  Move.Lézard);
+            ExacuteGameAndCheckResult(Move.Feuille, Move.Pierre);
+            ExacuteGameAndCheckResult(Move.Feuille, Move.Spock);
+            ExacuteGameAndCheckResult(Move.Ciseaux, Move.Feuille);
+            ExacuteGameAndCheckResult(Move.Ciseaux, Move.Lézard);
+            ExacuteGameAndCheckResult(Move.Lézard,  Move.Spock);
+            ExacuteGameAndCheckResult(Move.Lézard,  Move.Feuille);
+            ExacuteGameAndCheckResult(Move.Spock,   Move.Pierre);
+            ExacuteGameAndCheckResult(Move.Spock,   Move.Ciseaux);
+        }
 
-            result = ExecuteGame(f => new Game(f, 5), false, new[] { 5 }, new[] { 3 });
-            Check.That(result).Contains("Spock");
-            Check.That(result).Contains("Ciseaux");
+        private void ExacuteGameAndCheckResult(Move inputWinner, Move inputLoser)
+        {
+            var result = ExecuteGame(f => new Game(f, 5), false, new[] { (int)inputWinner }, new[] { (int)inputLoser });
+            Check.That(result).Contains(inputWinner.ToString());
+            Check.That(result).Contains(inputLoser.ToString());
             Check.That(result).Contains("Gagne");
 
-            result = ExecuteGame(f => new Game(f, 5), false, new[] { 4 }, new[] { 3 });
-            Check.That(result).Contains("Lézard");
-            Check.That(result).Contains("Ciseaux");
+            result = ExecuteGame(f => new Game(f, 5), false, new[] { (int)inputLoser }, new[] { (int)inputWinner });
+            Check.That(result).Contains(inputWinner.ToString());
+            Check.That(result).Contains(inputLoser.ToString());
             Check.That(result).Contains("Perdu");
         }
 

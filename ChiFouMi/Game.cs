@@ -21,27 +21,17 @@ namespace ChiFouMi
 
             while (!InputPlayer().StartsWith("exit"))
             {
-                DisplayMoveChoice();
+                Output("Veuillez choisir un signe:");
+                foreach (var move in _validInputs)
+                {
+                    Output(move + "- " + (Move)move);
+                }
 
-                ReadMoveAndPlayTurn(roxorMode, InputPlayer(), InputComputer());
-            }
-        }
-
-        private void DisplayMoveChoice()
-        {
-            Output("Veuillez choisir un signe:");
-            foreach (var move in _validInputs)
-            {
-                Output(move + "- " + (Move)move);
-            }
-        }
-
-        private void ReadMoveAndPlayTurn(bool roxorMode, string inputPlayer, int inputComputer)
-        {
-            int playerMove;
-            if (int.TryParse(inputPlayer, out playerMove) && _validInputs.Contains(playerMove))
-            {
-                PlayTurn(roxorMode, (Move)playerMove, (Move)inputComputer);
+                int playerMove;
+                if (int.TryParse(InputPlayer(), out playerMove) && _validInputs.Contains(playerMove))
+                {
+                    PlayTurn(roxorMode, (Move)playerMove, (Move)InputComputer());
+                }
             }
         }
 
@@ -51,23 +41,16 @@ namespace ChiFouMi
             {
                 Output("Tu es un roxor contre " + computerMove + "\r\nGagne!");
             }
-            else if (playerMove == computerMove)
-            {
-                OutputOutcome(playerMove, computerMove, "Egalite");
-            }
-            else if (playerMove.IsBeatenBy(computerMove))
-            {
-                OutputOutcome(playerMove, computerMove, "Perdu");
-            }
             else
             {
-                OutputOutcome(playerMove, computerMove, "Gagne");
-            }
-        }
+                var outcome = playerMove == computerMove
+                                ? "Egalite"
+                                : playerMove.IsBeatenBy(computerMove)
+                                        ? "Perdu"
+                                        : "Gagne";
 
-        private void OutputOutcome(Move playerMove, Move computerMove, string outcome)
-        {
-            Output(playerMove + " contre " + computerMove + "!\r\n" + outcome + "!");
+                Output(playerMove + " contre " + computerMove + "!\r\n" + outcome + "!");
+            }
         }
     }
 }

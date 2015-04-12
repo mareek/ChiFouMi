@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace ChiFouMi
 {
@@ -6,8 +7,8 @@ namespace ChiFouMi
     {
         static void Main(string[] args)
         {
-            var roxorMode = args.FirstOrDefault() == "roxor";
-            Launcher.LaunchPlayerVsComputerSpockGame(roxorMode);
+            var rand = new Random();
+            new Game(Console.WriteLine, 6).PlayGame(args.FirstOrDefault() == "roxor", Console.ReadLine, () => rand.Next(1, 6));
         }
     }
 }
